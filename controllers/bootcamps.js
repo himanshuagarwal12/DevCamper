@@ -6,10 +6,8 @@ const geocoder=require('../utils/geocoder');
 // Get all bootcamps
 // GET /api/v1/bootcamps
 //public
-exports.getBootcamps = asyncHandler(async(req, res, next) => {
-      
+exports.getBootcamps = asyncHandler(async(req, res, next) => {   
   res.status(200).json(res.advancedResults);
-  
 });
 // Get a bootcamp
 // GET /api/v1/bootcamps/:id
