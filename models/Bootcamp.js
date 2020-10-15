@@ -26,7 +26,7 @@ const BootcampSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      maxlength: [50, 'Phone number can not be longer than 50 characters']
+      maxlength: [20, 'Phone number can not be longer than 20 characters']
     },
     email: {
       type: String,
@@ -34,7 +34,7 @@ const BootcampSchema = new mongoose.Schema(
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         'Please add a valid email'
       ]
-    }, 
+    },
     address: {
       type: String,
       required: [true, 'Please add an address']
@@ -43,12 +43,11 @@ const BootcampSchema = new mongoose.Schema(
       // GeoJSON Point
       type: {
         type: String,
-        enum: ['Point'],
-
+        enum: ['Point']
       },
       coordinates: {
         type: [Number],
-        index: '2dsphere',
+        index: '2dsphere'
       },
       formattedAddress: String,
       street: String,
@@ -99,16 +98,25 @@ const BootcampSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true
     }
-},{
-  toJSON:{virtuals:true},
-  toObject:{virtuals:true}
-});
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+);
+
 // Create bootcamp slug from the name
 BootcampSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
-}); 
+});
+
 // Geocode & create location field
 BootcampSchema.pre('save', async function(next) {
   const loc = await geocoder.geocode(this.address);
@@ -142,4 +150,5 @@ BootcampSchema.virtual('courses', {
   foreignField: 'bootcamp',
   justOne: false
 });
+
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
