@@ -9,19 +9,19 @@ const geocoder=require('../utils/geocoder');
 exports.getBootcamps = asyncHandler(async(req, res, next) => {   
   res.status(200).json(res.advancedResults);
 });
-// Get a bootcamp
-// GET /api/v1/bootcamps/:id
-//public
-exports.getBootcamp =asyncHandler(async (req, res, next) => {
-        const bootcamp=await Bootcamp.findById(req.params.id);
-        if(!bootcamp){
-          return next( new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
-          );}
-        res
-        .status(200)
-        .json({ success: true, data: bootcamp});
+// @desc      Get single bootcamp
+// @route     GET /api/v1/bootcamps/:id
+// @access    Public
+exports.getBootcamp = asyncHandler(async (req, res, next) => {
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
-      next( new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  res.status(200).json({ success: true, data: bootcamp });
 });
 // Create a bootcamp
 //POST /api/v1/bootcamps/:id
@@ -37,7 +37,6 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
     const bootcamp = await Bootcamp.create(req.body);
 
     res.status(201).json({ success: true, data: bootcamp });
-    next(err);
 });
 // Update a bootcamp
 // PUT /api/v1/bootcamps/:id
